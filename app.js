@@ -9,8 +9,12 @@ const app = express();
 // Middleware
 app.use(cors({
   origin: function(origin, callback) {
-    // Allow all local development origins and specific production domains
-    if (!origin || origin.startsWith("http://localhost:") || origin.startsWith("http://127.0.0.1:") || origin === "https://thebibleglory.com" || origin === "https://www.thebibleglory.com") {
+    if (!origin || 
+        origin.startsWith("http://localhost:") || 
+        origin.startsWith("http://127.0.0.1:") || 
+        origin === "https://thebibleglory.com" || 
+        origin === "https://www.thebibleglory.com" ||
+        origin === "https://backend.thebibleglory.com") {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -18,6 +22,7 @@ app.use(cors({
   },
   credentials: true
 }));
+
 app.use(express.json());
 app.use(cookieParser());
 
