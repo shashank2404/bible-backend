@@ -34,6 +34,7 @@ app.use(cookieParser());
 app.use("/api/auth",    require("./routes/auth"));      // /api/auth/login
 app.use("/api/auth",    require("./routes/register"));  // /api/auth/register
 app.use("/api", require("./routes/googleAuth"));         // Google Auth signin
+app.use("/api", require("./routes/facebookLogin"));      // Facebook Auth signin
 app.use("/api/blog",    require("./routes/Blog"));
 app.use("/api/profile", require("./routes/profile"));
 
