@@ -43,16 +43,14 @@ router.get("/auth/facebook", (req, res) => {
 // ─── 2. FACEBOOK CALLBACK ─────────────────────────────────────
 router.get("/auth/facebook/callback", async (req, res) => {
   const { code, error } = req.query;
-  const protocol = req.headers["x-forwarded-proto"] || req.protocol;
-  const host = req.get("host");
-  const clientUrl = `${protocol}://${host}`;
+  const clientUrl = process.env.CLIENT_URL || "https://thebibleglory.com";
 
   if (error) {
-    return res.redirect(`${clientUrl}/login?error=${error}`);
+    return res.redirect(`${clientUrl}/signin?error=${error}`);
   }
 
   if (!code) {
-    return res.redirect(`${clientUrl}/login?error=no_code`);
+    return res.redirect(`${clientUrl}/signin?error=no_code`);
   }
 
   try {
@@ -70,7 +68,7 @@ router.get("/auth/facebook/callback", async (req, res) => {
 
     if (tokenData.error) {
       console.error("Facebook Token Exchange API Error:", tokenData.error);
-      return res.redirect(`${clientUrl}/login?error=token_failed`);
+      return res.redirect(`${clientUrl}/signin?error=token_failed`);
     }
 
     const accessToken = tokenData.access_token;
@@ -82,7 +80,7 @@ router.get("/auth/facebook/callback", async (req, res) => {
 
     if (profileData.error) {
       console.error("Facebook Profile Fetch API Error:", profileData.error);
-      return res.redirect(`${clientUrl}/login?error=profile_failed`);
+      return res.redirect(`${clientUrl}/signin?error=profile_failed`);
     }
 
     const { id, name, email, picture } = profileData;
@@ -109,11 +107,11 @@ router.get("/auth/facebook/callback", async (req, res) => {
 
     // D. Issue JWT and redirect
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "7d" });
-    res.redirect(`${clientUrl}/login?token=${token}`);
+    res.redirect(`${clientUrl}/signin?token=${token}`);
 
   } catch (err) {
     console.error("Critical error in Facebook callback:", err);
-    res.redirect(`${clientUrl}/login?error=server_crash`);
+    res.redirect(`${clientUrl}/signin?error=server_crash`);
   }
 });
 
