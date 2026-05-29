@@ -2,9 +2,13 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
-require("dotenv").config();
+//require("dotenv").config();
 
 const app = express();
+// Sirf development mein .env load karo
+if (process.env.NODE_ENV !== 'production') {
+  require("dotenv").config();
+}
 
 // Middleware
 app.use(cors({
