@@ -33,7 +33,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors()); // Enable pre-flight for all routes explicitly
 
 app.use(express.json());
 app.use(cookieParser());
