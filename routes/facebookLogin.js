@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const fetch = require("node-fetch");
-const User = require("../Database Models/userModels");
+const User = require("../models/user");
 
 // Helper to get consistent redirect URI based on the actual request host
 const getRedirectUri = (req) => {
