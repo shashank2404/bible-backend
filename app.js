@@ -12,19 +12,28 @@ const app = express();
 
 // ✅ CORS config
 const corsOptions = {
-  origin: [
-    "https://thebibleglory.com",
-    "https://www.thebibleglory.com",
-    "https://backend.thebibleglory.com",
-    "http://localhost:3000",
-    "http://localhost:5173"
-  ],
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      "https://thebibleglory.com",
+      "https://www.thebibleglory.com",
+      "https://backend.thebibleglory.com",
+      "http://localhost:3000",
+      "http://localhost:5173"
+    ];
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+  allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"]
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+app.options("*", cors()); // Enable pre-flight for all routes explicitly
 
 app.use(express.json());
 app.use(cookieParser());
