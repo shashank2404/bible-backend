@@ -2,9 +2,13 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
-require("dotenv").config();
+//require("dotenv").config();
 
 const app = express();
+// Sirf development mein .env load karo
+if (process.env.NODE_ENV !== 'production') {
+  require("dotenv").config();
+}
 
 // Middleware
 app.use(cors({
@@ -30,7 +34,8 @@ app.use(cookieParser());
 app.use("/api/auth",    require("./routes/auth"));      // /api/auth/login
 app.use("/api/auth",    require("./routes/register"));  // /api/auth/register
 app.use("/api", require("./routes/googleAuth"));         // Google Auth signin
-app.use("/api/blog",    require("./routes/blog"));
+app.use("/api", require("./routes/facebookLogin"));      // Facebook Auth signin
+app.use("/api/blog",    require("./routes/Blog"));
 app.use("/api/profile", require("./routes/profile"));
 
 app.get("/", (req, res) => res.send("Backend Running"));
